@@ -1,0 +1,86 @@
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Interaktiv tugmalar</title>
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                height: 100vh;
+                margin: 0;
+                background-color: #f4f4f4;
+                overflow: hidden;
+                position: relative;
+            }
+            .container {
+                text-align: center;
+            }
+            button {
+                padding: 10px 20px;
+                font-size: 16px;
+                cursor: pointer;
+                border: none;
+                border-radius: 5px;
+            }
+            #yes-button {
+                background-color: #4caf50;
+                color: white;
+                margin-right: 150px;
+            }
+            #no-button {
+                background-color: #f44336;
+                color: white;
+                position: absolute;
+                top: 55%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <h1>Sen gey misan</h1>
+            <button id="yes-button">Ha</button>
+            <button id="no-button">Yo'q</button>
+        </div>
+
+        <script>
+            const noButton = document.getElementById('no-button');
+            const margin = 50; // Tugma kursor yaqinlashganda qancha uzoqlashishi kerakligini aniqlovchi cheklov.
+
+            document.addEventListener('mousemove', (e) => {
+                const buttonRect = noButton.getBoundingClientRect();
+                const cursorX = e.clientX;
+                const cursorY = e.clientY;
+
+                // Kursor va tugma orasidagi masofani hisoblash
+                const distanceX = cursorX - (buttonRect.left + buttonRect.width / 2);
+                const distanceY = cursorY - (buttonRect.top + buttonRect.height / 2);
+
+                const distance = Math.sqrt(distanceX ** 2 + distanceY ** 2);
+
+                // Agar masofa ma'lum cheklovdan kichik bo'lsa, tugmani ko'chirish
+                if (distance < margin) {
+                    const offsetX = distanceX > 0 ? -margin : margin;
+                    const offsetY = distanceY > 0 ? -margin : margin;
+
+                    const newLeft = Math.min(
+                        Math.max(buttonRect.left + offsetX, 0),
+                        window.innerWidth - buttonRect.width
+                    );
+                    const newTop = Math.min(
+                        Math.max(buttonRect.top + offsetY, 0),
+                        window.innerHeight - buttonRect.height
+                    );
+
+                    noButton.style.left = `${newLeft}px`;
+                    noButton.style.top = `${newTop}px`;
+                }
+            });
+        </script>
+    </body>
+    </html>
